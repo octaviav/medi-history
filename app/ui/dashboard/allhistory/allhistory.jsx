@@ -1,7 +1,13 @@
 import React from 'react';
 import styles from './allhistory.module.css';
 
+/**
+ * HistoryTable Component
+ * Displays a table of patient medical history including visits, diagnoses, and treatments
+ */
 const HistoryTable = () => {
+  // Sample patient history data
+  // Data from database
   const historyData = [
     {
       id: 1,
@@ -34,9 +40,13 @@ const HistoryTable = () => {
 
   return (
     <div className={styles.container}>
+      {/* Main title for the history section */}
       <h2 className={styles.pageTitle}>Patient History</h2>
+      
+      {/* Table wrapper for potential scrolling/responsiveness */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
+          {/* Table header row */}
           <thead>
             <tr>
               <th>Date of Visit</th>
@@ -48,6 +58,8 @@ const HistoryTable = () => {
               <th>Actions</th>
             </tr>
           </thead>
+          
+          {/* Table data generated from historyData array */}
           <tbody>
             {historyData.map((visit) => (
               <tr key={visit.id}>
@@ -62,7 +74,11 @@ const HistoryTable = () => {
                 <td>
                   <span className={styles.prescription}>{visit.prescriptions}</span>
                 </td>
+                
+                {/* Notes column with potential for longer text */}
                 <td className={styles.notes}>{visit.notes}</td>
+                
+                {/* Actions column with button for additional functionality */}
                 <td>
                   <button className={styles.detailsButton}>
                     View Details
