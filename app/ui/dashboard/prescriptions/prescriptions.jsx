@@ -1,7 +1,8 @@
 "use client"
 
 import React from 'react';
-import styles from "./prescriptions.module.css"
+import styles from "./prescriptions.module.css";
+import { jsPDF } from 'jspdf';
 
 const prescriptions = [
   {
@@ -38,7 +39,48 @@ const prescriptions = [
 
 const Prescriptions = () => {
   const downloadPrescription = (prescription) => {
-    console.log(`Downloading prescription for ${prescription.medication}`);
+    // Create a new PDF document to download
+    const doc = new jsPDF();
+    
+    // Add a title to the PDF
+    doc.setFontSize(18);
+    doc.text("Prescription Details", 14, 22);
+    
+    // Add a horizontal line
+    doc.setLineWidth(0.5);
+    doc.line(14, 25, 196, 25);
+    
+    // Adds prescription information 
+    doc.setFontSize(12);
+    doc.text(`Date: ${prescription.date}`, 14, 35);
+    doc.text(`Patient ID: ${prescription.id}`, 14, 42);
+    doc.text(`Medication: ${prescription.medication}`, 14, 49);
+    doc.text(`Dosage: ${prescription.dosage}`, 14, 56);
+    doc.text(`Frequency: ${prescription.frequency}`, 14, 63);
+    doc.text(`Doctor: ${prescription.doctor}`, 14, 70);
+    
+    // Handle longer text for instructions with word wrap
+    const splitInstructions = doc.splitTextToSize(`Instructions: ${prescription.instructions}`, 180);
+    doc.text(splitInstructions, 14, 77);
+    
+    // Add status with color
+    doc.text(`Status: ${prescription.status}`, 14, 90);
+    
+    // Add a signature line for the doctor
+    doc.setLineWidth(0.5);
+    doc.line(14, 110, 80, 110);
+    doc.text("Doctor's Signature", 14, 118);
+    
+    // footer
+    doc.setFontSize(10);
+    doc.text(
+      `Prescription document generated on ${new Date().toLocaleDateString()}`,
+      14,
+      doc.internal.pageSize.height - 10
+    );
+    
+    // Saves the PDF with a medication name
+    doc.save(`prescription_${prescription.id}_${prescription.medication}.pdf`);
   };
 
   const getStatusColor = (status) => {
